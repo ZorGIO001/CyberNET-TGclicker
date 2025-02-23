@@ -7,16 +7,23 @@ const scoreElement = document.getElementById('score');
 const clickButton = document.getElementById('clickButton');
 const topPlayersList = document.getElementById('topPlayers');
 const clickEffect = document.getElementById('clickEffect');
+const progressBar = document.getElementById('progress');
 
 scoreElement.textContent = score;
+
+// Обновление прогресс-бара (0-100%)
+function updateProgress() {
+    const progress = Math.min((score % 100) / 100 * 100, 100);
+    progressBar.style.width = `${progress}%`;
+}
 
 // Эффект клика
 function createClickEffect(x, y) {
     const effect = document.createElement('div');
     effect.textContent = '+1';
     effect.className = 'click-animation';
-    effect.style.left = `${x}px`;
-    effect.style.top = `${y}px`;
+    effect.style.left = `${x - 20}px`;
+    effect.style.top = `${y - 30}px`;
     clickEffect.appendChild(effect);
     setTimeout(() => effect.remove(), 1000);
 }
@@ -32,21 +39,21 @@ clickButton.addEventListener('click', (e) => {
     const y = rect.top;
     createClickEffect(x, y);
 
+    updateProgress();
     updateLeaderboard();
 });
 
-// Локальный топ игроков (имитация)
+// Локальный топ игроков
 let leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [
-    { name: 'Player1', score: 100 },
-    { name: 'Player2', score: 80 },
-    { name: 'Player3', score: 50 }
+    { name: 'HamsterKing', score: 500 },
+    { name: 'CoinMaster', score: 300 },
+    { name: 'ClickHam', score: 150 }
 ];
 
 function updateLeaderboard() {
-    const userName = tg.initDataUnsafe.user ? tg.initDataUnsafe.user.first_name : 'You';
+    const userName = tg.initDataUnsafe.user ? tg.initDataUnsafe.user.first_name : 'Hamster';
     const userScore = score;
 
-    // Добавляем текущего игрока в топ
     const existingPlayer = leaderboard.find(p => p.name === userName);
     if (existingPlayer) {
         existingPlayer.score = Math.max(existingPlayer.score, userScore);
@@ -54,19 +61,18 @@ function updateLeaderboard() {
         leaderboard.push({ name: userName, score: userScore });
     }
 
-    // Сортируем и обрезаем до топ-5
     leaderboard.sort((a, b) => b.score - a.score);
     leaderboard = leaderboard.slice(0, 5);
     localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
 
-    // Отображаем топ
     topPlayersList.innerHTML = '';
     leaderboard.forEach((player, index) => {
         const li = document.createElement('li');
-        li.textContent = `${index + 1}. ${player.name}: ${player.score} 💰`;
+        li.textContent = `${index + 1}. ${player.name}: ${player.score} 🪙`;
         topPlayersList.appendChild(li);
     });
 }
 
-// Инициализация лидерборда
+// Инициализация
+updateProgress();
 updateLeaderboard();
