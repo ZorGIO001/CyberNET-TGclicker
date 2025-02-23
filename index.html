@@ -3,15 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Telegram Clicker Game</title>
+    <title>Telegram Clicker</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
-        <h1>Telegram Clicker</h1>
-        <p>Очки: <span id="score">0</span></p>
-        <button id="clickButton">Клик!</button>
+        <h1>Clicker Mania</h1>
+        <div class="balance">
+            <p>Баланс: <span id="score">0</span> 💰</p>
+        </div>
+        <button id="clickButton" class="click-btn">Клик!</button>
+        <div class="leaderboard">
+            <h2>Топ игроков</h2>
+            <ul id="topPlayers"></ul>
+        </div>
     </div>
+    <div id="clickEffect"></div>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="script.js"></script>
 </body>
